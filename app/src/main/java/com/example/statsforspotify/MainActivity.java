@@ -13,16 +13,21 @@ import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import com.google.firebase.firestore.*;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private Call mCall;
 
     private TextView tokenTextView, codeTextView, profileTextView;
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +151,21 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     setTextAsync(jsonObject.toString(3), profileTextView);
+
+                    String userId = jsonObject.getString("id");
+
+                    Map<String, Object> userObj = new HashMap<>();
+                    userObj.put("username", jsonObject.getString("display_name"));
+                    userObj.put("email", jsonObject.getString("email"));
+
+                    JSONArray arr = (JSONArray) jsonObject.get("images");
+                    // todo: make function to choose correct pfp based on dimensions
+                    JSONObject pfpObj = arr.getJSONObject(0);
+                    userObj.put("pfp", pfpObj.getString("url"));
+
+                    db.collection("userdata").document(userId)
+                            .set(userObj);
+
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity.this, "Failed to parse data, watch Logcat for more details",

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "313085525437",
+    "project_id": "spotify-stags",
+    "storage_bucket": "spotify-stags.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:313085525437:android:fd967ee4d6b97f1e9366d4",
+        "android_client_info": {
+          "package_name": "com.example.statsforspotify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXV2yKXiLkfSK2n7KXk4PzMnRQAEHVHbs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

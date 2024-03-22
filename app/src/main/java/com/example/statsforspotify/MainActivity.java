@@ -124,6 +124,9 @@ public class MainActivity extends AppCompatActivity {
      * This method will get the user profile using the token
      */
     public void onGetUserProfileClicked() {
+        HashMap<String, String> spotifyAuthData = SpotifyAuthData.getInstance();
+
+        mAccessToken = spotifyAuthData.get("token");
         if (mAccessToken == null) {
             Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;

@@ -24,12 +24,15 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
+import com.google.android.material.chip.ChipGroup;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
@@ -57,6 +60,8 @@ public class WrappedActivity extends AppCompatActivity {
 
     Button saveButton;
     MediaPlayer player;
+
+    ChipGroup termGroup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +72,7 @@ public class WrappedActivity extends AppCompatActivity {
         trackTitle1 = findViewById(R.id.track_title_1);
         artist1 = findViewById(R.id.artist_name_1);
         trackImg1 = findViewById(R.id.track_img_1);
+        termGroup = findViewById(R.id.term_group);
 
 //        rootView = findViewById(R.id.activity_wrapped);
 
@@ -82,27 +88,31 @@ public class WrappedActivity extends AppCompatActivity {
 
         });
 
+        termGroup.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
+            @Override
+            public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
+                Log.d(TAG, "onCheckedChanged: RUNNING CHEKCED CHANGED");
+                int id = termGroup.getCheckedChipId();
 
+                if (id == R.id.short_term_chip) {
+                    populdateData("short_term");
+                } else if (id == R.id.medium_term_chip) {
+                    Log.d(TAG, "onCheckedChanged: CHECKING MED TEMR");
+                    populdateData("medium_term");
+                } else {
+                    populdateData("long_term");
+                }
+            }
+        });
 
-
-//        try {
-//            Uri uri = Uri.parse("https://p.scdn.co/mp3-preview/84ef49a1e1bdac04b7dfb1dea3a56d1ffc50357?cid=2446c9ec0514458184c0e2018a68f8c0");
-//            MediaPlayer player = new MediaPlayer();
-//            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//
-//            player.setDataSource(this, uri);
-//            player.prepare();
-//            player.start();
-//            Log.d(TAG, "onCreate: PLAYER STARTING");
-//        } catch (IOException e) {
-//            Log.d(TAG, "onCreate: EXX" + e.toString());
-//        }
-//
-
-        initializeMediaPlayer();
+        // initializeMediaPlayer();
 
         // populate all the fields
-         HashMap<String, String> spotifyAuthData = SpotifyAuthData.getInstance();
+        populdateData("short_term");
+    }
+
+    public void populdateData(String range) {
+        HashMap<String, String> spotifyAuthData = SpotifyAuthData.getInstance();
 
         final Request request = new Request.Builder()
                 .url("https://api.spotify.com/v1/me")
@@ -147,7 +157,6 @@ public class WrappedActivity extends AppCompatActivity {
             }
         });
 
-        String range = "short_term";
 
         final Request topTracksRequest = new Request.Builder()
                 .url("https://api.spotify.com/v1/me/top/tracks?time_range=" + range + "&limit=10&offset=0")
@@ -272,8 +281,6 @@ public class WrappedActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
     public Bitmap screenShot(View view) {
         Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),

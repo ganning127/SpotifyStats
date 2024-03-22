@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
@@ -145,6 +147,7 @@ public class Login extends AppCompatActivity {
                         Map<String, Object> userObj = new HashMap<>();
                         userObj.put("username", jsonObject.getString("display_name"));
                         userObj.put("email", jsonObject.getString("email"));
+                        userObj.put("userId", userId);
 
                         JSONArray arr = (JSONArray) jsonObject.get("images");
                         // todo: make function to choose correct pfp based on dimensions
@@ -152,8 +155,34 @@ public class Login extends AppCompatActivity {
                         userObj.put("pfp", pfpObj.getString("url"));
 
                         // TODO: if user_id exists, don't insert; right now this will overate any changes user made to their user object in the settings page
-                        db.collection("userdata").document(userId)
-                                .set(userObj);
+//                        db.collection("userdata").document(userId)
+//                                .set(userObj);
+
+                        DocumentReference docRef = db.collection("userdata").document(userId);
+
+// Check if the document exists
+                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        // Document exists
+                                        Log.d(TAG, "Document exists, not doing anything...");
+                                        // don't do anything
+                                    } else {
+                                        // Document does not exist
+                                        Log.d(TAG, "User does not yet exist, inserting...");
+                                        db.collection("userdata").document(userId).set(userObj);
+                                    }
+                                } else {
+                                    // An error occurred
+                                    Log.d(TAG, "Failed with: ", task.getException());
+                                }
+                            }
+                        });
+
+
 
                         Intent intent = new Intent( Login.this, WrappedActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

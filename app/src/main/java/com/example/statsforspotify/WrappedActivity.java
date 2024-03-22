@@ -25,12 +25,15 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +65,13 @@ public class WrappedActivity extends AppCompatActivity {
     MediaPlayer player;
 
     ChipGroup termGroup;
+
+    HashMap<String, Object> generatedWrapped;
+
+    Button publishButton;
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +84,7 @@ public class WrappedActivity extends AppCompatActivity {
         trackImg1 = findViewById(R.id.track_img_1);
         termGroup = findViewById(R.id.term_group);
 
+        publishButton = findViewById(R.id.publish_button);
 //        rootView = findViewById(R.id.activity_wrapped);
 
         saveButton = findViewById(R.id.save_button);
@@ -88,6 +99,26 @@ public class WrappedActivity extends AppCompatActivity {
 
         });
 
+        pfpImgView.setOnClickListener((v) -> {
+            Intent intent = new Intent( WrappedActivity.this, ProfileActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            startActivity(intent);
+
+        });
+
+        publishButton.setOnClickListener((v) -> {
+            Log.d(TAG, "onCreate: PUBLISH BUTTON CLICKED");
+            Log.d(TAG, "onCreate: PUBLISH: " + generatedWrapped.toString());
+
+            HashMap<String, String> spotifyAuthData = SpotifyAuthData.getInstance();
+            String userId = spotifyAuthData.get("spotify_id");
+
+            db.collection("wraps").document().set(generatedWrapped); // auto generate id
+
+
+            Log.d(TAG, "onCreate: PUBLISHED SUCCESSFUL");
+        });
         termGroup.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
             @Override
             public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
@@ -105,7 +136,7 @@ public class WrappedActivity extends AppCompatActivity {
             }
         });
 
-        // initializeMediaPlayer();
+        initializeMediaPlayer();
 
         // populate all the fields
         populdateData("short_term");
@@ -113,6 +144,11 @@ public class WrappedActivity extends AppCompatActivity {
 
     public void populdateData(String range) {
         HashMap<String, String> spotifyAuthData = SpotifyAuthData.getInstance();
+        generatedWrapped = new HashMap<>();
+        generatedWrapped.put("term_length", range);
+        generatedWrapped.put("spotify_id", spotifyAuthData.get("spotify_id"));
+        ArrayList<HashMap<String, String>> tracksList = new ArrayList<>();
+        ArrayList<HashMap<String, String>> artistsList = new ArrayList<>();
 
         final Request request = new Request.Builder()
                 .url("https://api.spotify.com/v1/me")
@@ -131,12 +167,12 @@ public class WrappedActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+
                 try {
                     final JSONObject jsonObject;
                     jsonObject = new JSONObject(response.body().string());
                     JSONArray arr = (JSONArray) jsonObject.get("images");
                     JSONObject pfpObj = arr.getJSONObject(0);
-
 
 
                     String imgURL = pfpObj.getString("url");
@@ -205,6 +241,13 @@ public class WrappedActivity extends AppCompatActivity {
 
                         int artistResId = getResources().getIdentifier("artist_name_" + iForIds, "id", packageName);
 
+                        // store into firebase stuff
+                        HashMap<String, String> dataHm = new HashMap<>();
+                        dataHm.put("title", track1String);
+                        dataHm.put("artist", artist1String);
+                        dataHm.put("img", albumCoverImg1);
+
+                        tracksList.add(dataHm);
 
                         ImageView albumImgView = findViewById(imgViewResId);
                         TextView trackTitleTextView = findViewById(trackTitleResId);
@@ -214,6 +257,8 @@ public class WrappedActivity extends AppCompatActivity {
                         setTextAsync(track1String, trackTitleTextView);
                         setTextAsync(artist1String, artistTextView);
                     }
+
+                    generatedWrapped.put("tracks", tracksList);
 
 
                 } catch (JSONException e) {
@@ -264,6 +309,14 @@ public class WrappedActivity extends AppCompatActivity {
 
 
                         ImageView artistImgView = findViewById(imgViewResId);
+
+                        HashMap<String, String> dataHm = new HashMap<>();
+                        dataHm.put("name", artistName);
+                        dataHm.put("img", artistImg);
+
+                        artistsList.add(dataHm);
+
+
 // ERRORS OUT
 //                        artistImgView.setOnClickListener((v) -> {
 //                            Log.d(TAG, "onResponse: TAPPED: " + iForIds);
@@ -275,6 +328,8 @@ public class WrappedActivity extends AppCompatActivity {
 
 
                     }
+
+                    generatedWrapped.put("artists", artistsList);
                 } catch(JSONException e) {
                     Log.d(TAG, "onResponse (artists): " + e.toString());
 

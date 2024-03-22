@@ -128,8 +128,10 @@ public class WrappedActivity extends AppCompatActivity {
 
                     // track 1
                     JSONArray items = (JSONArray) jsonObject.get("items");
+                    String packageName = getPackageName();
 
-                    for (int i = 1; i <= 5; i++) {
+
+                    for (int i = 0; i <= 4; i++) {
                         JSONObject track1 = items.getJSONObject(i);
                         String albumCoverImg1 = track1.getJSONObject("album").getJSONArray("images").getJSONObject(1).getString("url");
 
@@ -138,33 +140,90 @@ public class WrappedActivity extends AppCompatActivity {
                         String artist1String = track1.getJSONArray("artists").getJSONObject(0).getString("name");
 
 
-                        Log.d(TAG, "onResponse: track1String: " + track1String);
-                        Log.d(TAG, "onResponse: artist1String: " + artist1String);
+                        Log.d(TAG, "onResponse: trackString: " + track1String);
+                        Log.d(TAG, "onResponse: artistString: " + artist1String);
                         Log.d(TAG, "onResponse: album_cover_url: " + albumCoverImg1);
 
+                        int iForIds = i + 1;
+                        int trackTitleResId = getResources().getIdentifier("track_title_" + iForIds, "id", packageName);
 
-                        new ImageLoadTask(albumCoverImg1, trackImg1).execute();
-                        setTextAsync(track1String, trackTitle1);
-                        setTextAsync(artist1String, artist1);
+                        int imgViewResId = getResources().getIdentifier("track_img_" + iForIds, "id", packageName);
 
+                        int artistResId = getResources().getIdentifier("artist_name_" + iForIds, "id", packageName);
+
+
+                        ImageView albumImgView = findViewById(imgViewResId);
+                        TextView trackTitleTextView = findViewById(trackTitleResId);
+                        TextView artistTextView = findViewById(artistResId);
+
+                        new ImageLoadTask(albumCoverImg1, albumImgView).execute();
+                        setTextAsync(track1String, trackTitleTextView);
+                        setTextAsync(artist1String, artistTextView);
                     }
-
-                    String packageName = getPackageName();
-                    int resId = getResources().getIdentifier("track_title_1", "id", getPackageName());
-
-
-                    TextView trackTitle = findViewById(resId);
-                    String texttoUse = "HELLO";
-
-                    setTextAsync(texttoUse, trackTitle);
 
 
                 } catch (JSONException e) {
-                    Log.d(TAG, "onResponse: " + e.toString());
+                    Log.d(TAG, "onResponse (tracks): " + e.toString());
                 }
 
             }
         });
+
+
+        final Request topArtistsRequest = new Request.Builder()
+                .url("https://api.spotify.com/v1/me/top/artists?time_range=" + range + "&limit=10&offset=0")
+                .addHeader("Authorization", "Bearer " + spotifyAuthData.get("token"))
+                .build();
+
+        Call mCall2;
+        mCall2 = mOkHttpClient.newCall(topArtistsRequest);
+
+        mCall2.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                try {
+                    final JSONObject jsonObject;
+
+                    jsonObject = new JSONObject(response.body().string());
+                    Log.d(TAG, "onResponse: " + jsonObject.toString());
+
+                    // track 1
+                    JSONArray items = (JSONArray) jsonObject.get("items");
+                    String packageName = getPackageName();
+
+                    for (int i = 0; i < 4; i++) {
+                        JSONObject artistJSON = items.getJSONObject(i);
+                        String artistImg = artistJSON.getJSONArray("images").getJSONObject(1).getString("url");
+
+                        String artistName = artistJSON.getString("name");
+
+                        int iForIds = i + 1;
+
+                        int imgViewResId = getResources().getIdentifier("artist_img_" + iForIds, "id", packageName);
+
+                        int artistNameId = getResources().getIdentifier("top_artist_name_" + iForIds, "id", packageName);
+
+
+                        ImageView artistImgView = findViewById(imgViewResId);
+                        TextView artistNameTextView = findViewById(artistNameId);
+
+                        new ImageLoadTask(artistImg, artistImgView).execute();
+                        setTextAsync(artistName, artistNameTextView);
+
+
+                    }
+                } catch(JSONException e) {
+                    Log.d(TAG, "onResponse (artists): " + e.toString());
+
+                }
+            }
+        });
+
 
     }
 

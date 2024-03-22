@@ -5,6 +5,8 @@
     android:id="@+id/activity_wrapped"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:backgroundTint="#FFFFFF"
     tools:context=".WrappedActivity">
 
     <TextView
@@ -69,8 +71,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="start"
-                android:layout_weight="0"
-                />
+                android:layout_weight="0" />
 
             <View
                 android:layout_width="5dp"
@@ -125,8 +126,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="start"
-                android:layout_weight="0"
-                />
+                android:layout_weight="0" />
 
             <View
                 android:layout_width="5dp"
@@ -181,8 +181,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="start"
-                android:layout_weight="0"
-                />
+                android:layout_weight="0" />
 
             <View
                 android:layout_width="5dp"
@@ -237,8 +236,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="start"
-                android:layout_weight="0"
-                />
+                android:layout_weight="0" />
 
             <View
                 android:layout_width="5dp"
@@ -293,8 +291,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="start"
-                android:layout_weight="0"
-                />
+                android:layout_weight="0" />
 
             <View
                 android:layout_width="5dp"
@@ -337,13 +334,13 @@
         app:layout_constraintTop_toTopOf="@id/track_card_5" />
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
         android:id="@+id/top_artists_card_1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/top_artists_text" >
+        app:layout_constraintTop_toBottomOf="@id/top_artists_text">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -353,8 +350,7 @@
             <ImageView
                 android:id="@+id/artist_img_1"
                 android:layout_width="80dp"
-                android:layout_height="80dp"
-                 />
+                android:layout_height="80dp" />
 
             <TextView
                 android:id="@+id/top_artist_name_1"
@@ -368,10 +364,10 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/top_artists_card_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:id="@+id/top_artists_card_2"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toEndOf="@id/top_artists_card_1"
         app:layout_constraintTop_toBottomOf="@+id/top_artists_text">
@@ -398,10 +394,10 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/top_artists_card_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:id="@+id/top_artists_card_3"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toEndOf="@id/top_artists_card_2"
         app:layout_constraintTop_toBottomOf="@+id/top_artists_text">
@@ -426,6 +422,7 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -459,12 +456,23 @@
         android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="21dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="#1DB954"
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/publish_button"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#1DB954"
+        android:text="Publish"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/save_button" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

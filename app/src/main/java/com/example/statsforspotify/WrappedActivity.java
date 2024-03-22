@@ -1,16 +1,26 @@
 package com.example.statsforspotify;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.Image;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
@@ -43,6 +53,10 @@ public class WrappedActivity extends AppCompatActivity {
 
     TextView artist1;
 
+    ConstraintLayout rootView;
+
+    Button saveButton;
+    MediaPlayer player;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +68,38 @@ public class WrappedActivity extends AppCompatActivity {
         artist1 = findViewById(R.id.artist_name_1);
         trackImg1 = findViewById(R.id.track_img_1);
 
+//        rootView = findViewById(R.id.activity_wrapped);
 
+        saveButton = findViewById(R.id.save_button);
+
+
+        saveButton.setOnClickListener((v) -> {
+            Log.d(TAG, "onCreate: SAVE BUTTON CLICKED");
+
+            View root = getWindow().getDecorView().findViewById(R.id.activity_wrapped);
+
+            share(screenShot(root));
+
+        });
+
+
+
+
+//        try {
+//            Uri uri = Uri.parse("https://p.scdn.co/mp3-preview/84ef49a1e1bdac04b7dfb1dea3a56d1ffc50357?cid=2446c9ec0514458184c0e2018a68f8c0");
+//            MediaPlayer player = new MediaPlayer();
+//            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//
+//            player.setDataSource(this, uri);
+//            player.prepare();
+//            player.start();
+//            Log.d(TAG, "onCreate: PLAYER STARTING");
+//        } catch (IOException e) {
+//            Log.d(TAG, "onCreate: EXX" + e.toString());
+//        }
+//
+
+        initializeMediaPlayer();
 
         // populate all the fields
          HashMap<String, String> spotifyAuthData = SpotifyAuthData.getInstance();
@@ -210,6 +255,10 @@ public class WrappedActivity extends AppCompatActivity {
 
 
                         ImageView artistImgView = findViewById(imgViewResId);
+// ERRORS OUT
+//                        artistImgView.setOnClickListener((v) -> {
+//                            Log.d(TAG, "onResponse: TAPPED: " + iForIds);
+//                        });
                         TextView artistNameTextView = findViewById(artistNameId);
 
                         new ImageLoadTask(artistImg, artistImgView).execute();
@@ -226,6 +275,29 @@ public class WrappedActivity extends AppCompatActivity {
 
 
     }
+    public Bitmap screenShot(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),
+                view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
+    }
+
+    private void share(Bitmap bitmap){
+        String pathofBmp=
+                MediaStore.Images.Media.insertImage(getApplicationContext().getContentResolver(),
+                        bitmap,"title", null);
+        Uri uri = Uri.parse(pathofBmp);
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Star App");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+
+
+        WrappedActivity.this.startActivity(Intent.createChooser(shareIntent, "hello hello"));
+    }
+
 
     private void setTextAsync(final String text, TextView textView) {
         runOnUiThread(() -> textView.setText(text));
@@ -236,5 +308,31 @@ public class WrappedActivity extends AppCompatActivity {
             mCall.cancel();
         }
     }
+
+    private void initializeMediaPlayer() {
+        player = new MediaPlayer();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            player.setAudioAttributes(new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setLegacyStreamType(AudioManager.STREAM_MUSIC)
+                    .build());
+        } else {
+            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        }
+        try {
+            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.start();
+                }
+            });
+            player.setDataSource("https://p.scdn.co/mp3-preview/84ef49a1e1bdac04b7dfb1dea3a56d1ffc50357?cid=2446c9ec0514458184c0e2018a68f8c0");
+            player.prepareAsync();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

@@ -30,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -71,6 +72,8 @@ public class WrappedActivity extends AppCompatActivity {
 
     Button publishButton;
 
+    TextView publicWrapsButton;
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -89,6 +92,15 @@ public class WrappedActivity extends AppCompatActivity {
 //        rootView = findViewById(R.id.activity_wrapped);
 
         saveButton = findViewById(R.id.save_button);
+        publicWrapsButton = findViewById(R.id.public_wraps_button);
+
+        publicWrapsButton.setOnClickListener((v) -> {
+            Intent intent = new Intent( WrappedActivity.this, PublicWraps.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            startActivity(intent);
+
+        });
 
 
         saveButton.setOnClickListener((v) -> {

@@ -182,13 +182,21 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="28dp"
-        android:layout_marginEnd="16dp"
         android:backgroundTint="#1DB954"
-        android:text="View my wraps"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        android:text="My wraps"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/update_button" />
 
+
+    <Button
+        android:id="@+id/view_related_artists_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:backgroundTint="#1DB954"
+        android:text="Recommended artists"
+        app:layout_constraintStart_toEndOf="@id/view_all_wraps_button"
+        app:layout_constraintTop_toBottomOf="@+id/update_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

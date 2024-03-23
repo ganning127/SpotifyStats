@@ -47,6 +47,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     Button viewAllWrapsButton;
 
+    Button viewRelatedArtistsButton;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
@@ -59,6 +61,14 @@ public class ProfileActivity extends AppCompatActivity {
         backButtonPfp = findViewById(R.id.back_button_pfp);
         deleteAccountButton = findViewById(R.id.delete_account_button);
         viewAllWrapsButton = findViewById(R.id.view_all_wraps_button);
+        viewRelatedArtistsButton = findViewById(R.id.view_related_artists_button);
+
+        viewRelatedArtistsButton.setOnClickListener((v) -> {
+            Intent intent = new Intent( ProfileActivity.this, RelatedArtists.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            startActivity(intent);
+        });
 
         backButtonPfp.setOnClickListener((v) -> {
 

@@ -35,7 +35,10 @@
             android:name=".ProfileActivity"
             android:exported="true">
         </activity>
-
+        <activity
+            android:name=".AllWraps"
+            android:exported="true">
+        </activity>
         <activity
             android:name=".WrappedActivity"
             android:exported="true">

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content">-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wrapped_stuff"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/wrap_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="username"
+        android:textAlignment="textStart"
+        android:textColor="#1DB954"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/wrap_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="creation_date"
+        android:textAlignment="textStart"
+        android:textSize="16sp"
+        android:textStyle="italic" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Top Tracks"
+                android:textAlignment="textStart"
+                android:textColor="#1DB954"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/wrap_track_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="track 1" />
+
+            <TextView
+                android:id="@+id/wrap_track_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="track 2" />
+
+            <TextView
+                android:id="@+id/wrap_track_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="track 3" />
+
+            <TextView
+                android:id="@+id/wrap_track_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="track 4" />
+
+            <TextView
+                android:id="@+id/wrap_track_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="track 5" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Top Artists"
+                android:textColor="#1DB954"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/wrap_artist_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="artist 1" />
+
+
+            <TextView
+                android:id="@+id/wrap_artist_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="artist 2" />
+
+            <TextView
+                android:id="@+id/wrap_artist_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="artist 3" />
+
+            <TextView
+                android:id="@+id/wrap_artist_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="artist 4" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,6 +115,8 @@ public class WrappedActivity extends AppCompatActivity {
             HashMap<String, String> spotifyAuthData = SpotifyAuthData.getInstance();
             String userId = spotifyAuthData.get("spotify_id");
 
+            generatedWrapped.put("createdAt", new Date().toString());
+
             db.collection("wraps").document().set(generatedWrapped); // auto generate id
 
 
@@ -180,6 +183,7 @@ public class WrappedActivity extends AppCompatActivity {
                     new ImageLoadTask(imgURL, pfpImgView).execute();
 
                     String displayName = (String) jsonObject.get("display_name");
+                    generatedWrapped.put("username", displayName);
 
                     // TODO: change this to fetch the name from firebase when we have a settings page
                     setTextAsync("Welcome, " + displayName, welcomeText);

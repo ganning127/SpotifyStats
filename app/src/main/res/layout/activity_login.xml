@@ -7,16 +7,34 @@
     android:layout_height="match_parent"
     tools:context=".Login">
 
+    <ImageView
+        android:id="@+id/login_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        tools:ignore="ContentDescription"
+        android:background="@drawable/login_background1"
+        android:scaleType="centerCrop"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+
+    </ImageView>
 
     <Button
         android:id="@+id/login_with_spotify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="166dp"
-        android:layout_marginEnd="155dp"
-        android:layout_marginBottom="343dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="420dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="100dp"
+        android:backgroundTint="@color/green"
         android:text="login with Spotify"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

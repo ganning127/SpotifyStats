@@ -1,10 +1,15 @@
 package com.example.statsforspotify;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +25,8 @@ import com.spotify.sdk.android.auth.AuthorizationResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.Request;
 import okhttp3.Call;
@@ -34,6 +41,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 public class Login extends AppCompatActivity {
     private final String TAG = "LOGIN";
     public static final int AUTH_CODE_REQUEST_CODE = 1;
@@ -47,6 +55,18 @@ public class Login extends AppCompatActivity {
     private Call mCall;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    boolean changeBackground = false;
+    final int[] arrLogin = {R.drawable.login_bg_00, R.drawable.login_bg_01, R.drawable.login_bg_02,
+            R.drawable.login_bg_03, R.drawable.login_bg_04, R.drawable.login_bg_05,
+            R.drawable.login_bg_06, R.drawable.login_bg_07, R.drawable.login_bg_08,
+            R.drawable.login_bg_09, R.drawable.login_bg_10, R.drawable.login_bg_11,
+            R.drawable.login_bg_12, R.drawable.login_bg_13, R.drawable.login_bg_14,
+            R.drawable.login_bg_15, R.drawable.login_bg_16, R.drawable.login_bg_17,
+            R.drawable.login_bg_18, R.drawable.login_bg_19, R.drawable.login_bg_20,
+            R.drawable.login_bg_21, R.drawable.login_bg_22};
+
+    int arrLoginIndex = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +79,13 @@ public class Login extends AppCompatActivity {
             Log.d(TAG, "onCreate: loginWithSpotifyButton clicked");
             getCode();
         });
+
+        ImageView loginView = (ImageView) findViewById(R.id.login_view);
+        changeLoginBackground(loginView, loginWithSpotifyButton);
+        loginView.setOnClickListener((v) -> {
+            changeBackground = !changeBackground;
+        });
+
     }
 
     /**
@@ -223,5 +250,38 @@ public class Login extends AppCompatActivity {
     protected void onDestroy() {
         cancelCall();
         super.onDestroy();
+    }
+
+    private void changeLoginBackground(ImageView loginView, Button button) {
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (changeBackground) {
+                            int nextBackground = (arrLoginIndex + 1) % arrLogin.length;
+                            int nextBackgroundID = arrLogin[nextBackground];
+                            loginView.setBackgroundResource(nextBackgroundID);
+                            arrLoginIndex = nextBackground;
+                            if (nextBackground > 0 && nextBackground < 11) {
+                                button.setBackgroundColor(getResources().getColor(R.color.black));
+                                button.setTextColor(getResources().getColor(R.color.white));
+                            } else {
+                                button.setBackgroundColor(getResources().getColor(R.color.white));
+                                button.setTextColor(getResources().getColor(R.color.black));
+                            }
+                        } else {
+                            cancelCall();
+                            loginView.setBackgroundResource(R.drawable.login_background1);
+                            button.setBackgroundColor(getResources().getColor(R.color.green));
+                            button.setTextColor(getResources().getColor(R.color.black));
+                        }
+                    }
+                });
+            }
+        };
+        timer.scheduleAtFixedRate(task, 0, 50);
     }
 }

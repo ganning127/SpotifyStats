@@ -9,18 +9,16 @@
 
     <ImageView
         android:id="@+id/login_view"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        tools:ignore="ContentDescription"
+        android:layout_height="match_parent"
         android:background="@drawable/login_bg_light_base"
-        android:scaleType="centerCrop"
         android:clickable="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-
-    </ImageView>
+        tools:ignore="ContentDescription"></ImageView>
 
     <Button
         android:id="@+id/login_with_spotify"

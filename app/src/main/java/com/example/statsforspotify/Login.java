@@ -148,15 +148,23 @@ public class Login extends AppCompatActivity {
                     .addHeader("Authorization", "Bearer " + mAccessToken)
                     .build();
 
-            cancelCall();
             mCall = mOkHttpClient.newCall(request);
 
             mCall.enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     Log.d("HTTP", "Failed to fetch data: " + e);
-                    Toast.makeText(Login.this, "Failed to fetch data, watch Logcat for more details",
-                            Toast.LENGTH_SHORT).show();
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(Login.this, "Failed to fetch data, watch Logcat for more details",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+
+//                    Toast.makeText(Login.this, "Failed to fetch data, watch Logcat for more details",
+//                            Toast.LENGTH_SHORT).show();
                 }
 
                 @Override

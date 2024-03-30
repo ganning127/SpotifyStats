@@ -109,7 +109,6 @@ public class WrappedActivity extends AppCompatActivity {
             View root = getWindow().getDecorView().findViewById(R.id.activity_wrapped);
 
             share(screenShot(root));
-
         });
 
         pfpImgView.setOnClickListener((v) -> {
@@ -371,7 +370,6 @@ public class WrappedActivity extends AppCompatActivity {
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Star App");
         shareIntent.putExtra(Intent.EXTRA_TEXT, "");
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-
 
         WrappedActivity.this.startActivity(Intent.createChooser(shareIntent, "hello hello"));
     }

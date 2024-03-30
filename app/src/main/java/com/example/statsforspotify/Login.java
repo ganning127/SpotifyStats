@@ -56,14 +56,12 @@ public class Login extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     boolean changeBackground = false;
-    final int[] arrLogin = {R.drawable.login_bg_00, R.drawable.login_bg_01, R.drawable.login_bg_02,
-            R.drawable.login_bg_03, R.drawable.login_bg_04, R.drawable.login_bg_05,
-            R.drawable.login_bg_06, R.drawable.login_bg_07, R.drawable.login_bg_08,
-            R.drawable.login_bg_09, R.drawable.login_bg_10, R.drawable.login_bg_11,
-            R.drawable.login_bg_12, R.drawable.login_bg_13, R.drawable.login_bg_14,
-            R.drawable.login_bg_15, R.drawable.login_bg_16, R.drawable.login_bg_17,
-            R.drawable.login_bg_18, R.drawable.login_bg_19, R.drawable.login_bg_20,
-            R.drawable.login_bg_21, R.drawable.login_bg_22};
+    final int[] arrLogin = {R.drawable.login_bg_light_00, R.drawable.login_bg_light_01, R.drawable.login_bg_light_02,
+            R.drawable.login_bg_light_03, R.drawable.login_bg_light_04, R.drawable.login_bg_light_05,
+            R.drawable.login_bg_light_06, R.drawable.login_bg_light_07, R.drawable.login_bg_light_08,
+            R.drawable.login_bg_light_09, R.drawable.login_bg_light_10, R.drawable.login_bg_light_11,
+            R.drawable.login_bg_light_12, R.drawable.login_bg_light_13, R.drawable.login_bg_light_14,
+            R.drawable.login_bg_light_15, R.drawable.login_bg_light_16, R.drawable.login_bg_light_17};
 
     int arrLoginIndex = 0;
 
@@ -265,6 +263,7 @@ public class Login extends AppCompatActivity {
                             int nextBackgroundID = arrLogin[nextBackground];
                             loginView.setBackgroundResource(nextBackgroundID);
                             arrLoginIndex = nextBackground;
+
                             if (nextBackground > 0 && nextBackground < 11) {
                                 button.setBackgroundColor(getResources().getColor(R.color.black));
                                 button.setTextColor(getResources().getColor(R.color.white));
@@ -273,10 +272,9 @@ public class Login extends AppCompatActivity {
                                 button.setTextColor(getResources().getColor(R.color.black));
                             }
                         } else {
-                            cancelCall();
-                            loginView.setBackgroundResource(R.drawable.login_background1);
+                            loginView.setBackgroundResource(R.drawable.login_bg_light_base);
                             button.setBackgroundColor(getResources().getColor(R.color.green));
-                            button.setTextColor(getResources().getColor(R.color.black));
+                            button.setTextColor(getResources().getColor(R.color.white));
                         }
                     }
                 });

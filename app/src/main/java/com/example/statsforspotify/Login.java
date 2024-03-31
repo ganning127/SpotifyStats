@@ -8,7 +8,9 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
@@ -84,6 +88,11 @@ public class Login extends AppCompatActivity {
             changeBackground = !changeBackground;
         });
 
+        ImageButton question = findViewById(R.id.login_question);
+        question.setOnClickListener((v) -> {
+            Snackbar.make(v, R.string.login_question_icon, Snackbar.LENGTH_LONG).
+                    setAction("Action", null).show();
+        });
     }
 
     /**
@@ -258,23 +267,20 @@ public class Login extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        TextView text = findViewById(R.id.login_text);
+                        ImageButton question = findViewById(R.id.login_question);
                         if (changeBackground) {
                             int nextBackground = (arrLoginIndex + 1) % arrLogin.length;
                             int nextBackgroundID = arrLogin[nextBackground];
                             loginView.setBackgroundResource(nextBackgroundID);
                             arrLoginIndex = nextBackground;
 
-                            if (nextBackground > 0 && nextBackground < 11) {
-                                button.setBackgroundColor(getResources().getColor(R.color.black));
-                                button.setTextColor(getResources().getColor(R.color.white));
-                            } else {
-                                button.setBackgroundColor(getResources().getColor(R.color.white));
-                                button.setTextColor(getResources().getColor(R.color.black));
-                            }
+                            text.setVisibility(View.GONE);
+                            question.setVisibility(View.GONE);
                         } else {
                             loginView.setBackgroundResource(R.drawable.login_bg_light_base);
-                            button.setBackgroundColor(getResources().getColor(R.color.green));
-                            button.setTextColor(getResources().getColor(R.color.white));
+                            text.setVisibility(View.VISIBLE);
+                            question.setVisibility(View.VISIBLE);
                         }
                     }
                 });

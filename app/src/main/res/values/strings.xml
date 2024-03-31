@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">statsforspotify</string>
     <string name="title_activity_login">login</string>
+    <string name="login_question_icon">Login in to Spotify. If you don\'t have an existing account,
+        a new account will be created for you.</string>
 </resources>

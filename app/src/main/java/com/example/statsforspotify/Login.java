@@ -8,7 +8,9 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
@@ -56,14 +60,12 @@ public class Login extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     boolean changeBackground = false;
-    final int[] arrLogin = {R.drawable.login_bg_00, R.drawable.login_bg_01, R.drawable.login_bg_02,
-            R.drawable.login_bg_03, R.drawable.login_bg_04, R.drawable.login_bg_05,
-            R.drawable.login_bg_06, R.drawable.login_bg_07, R.drawable.login_bg_08,
-            R.drawable.login_bg_09, R.drawable.login_bg_10, R.drawable.login_bg_11,
-            R.drawable.login_bg_12, R.drawable.login_bg_13, R.drawable.login_bg_14,
-            R.drawable.login_bg_15, R.drawable.login_bg_16, R.drawable.login_bg_17,
-            R.drawable.login_bg_18, R.drawable.login_bg_19, R.drawable.login_bg_20,
-            R.drawable.login_bg_21, R.drawable.login_bg_22};
+    final int[] arrLogin = {R.drawable.login_bg_light_00, R.drawable.login_bg_light_01, R.drawable.login_bg_light_02,
+            R.drawable.login_bg_light_03, R.drawable.login_bg_light_04, R.drawable.login_bg_light_05,
+            R.drawable.login_bg_light_06, R.drawable.login_bg_light_07, R.drawable.login_bg_light_08,
+            R.drawable.login_bg_light_09, R.drawable.login_bg_light_10, R.drawable.login_bg_light_11,
+            R.drawable.login_bg_light_12, R.drawable.login_bg_light_13, R.drawable.login_bg_light_14,
+            R.drawable.login_bg_light_15, R.drawable.login_bg_light_16, R.drawable.login_bg_light_17};
 
     int arrLoginIndex = 0;
 
@@ -86,6 +88,11 @@ public class Login extends AppCompatActivity {
             changeBackground = !changeBackground;
         });
 
+        ImageButton question = findViewById(R.id.login_question);
+        question.setOnClickListener((v) -> {
+            Snackbar.make(v, R.string.login_question_icon, Snackbar.LENGTH_LONG).
+                    setAction("Action", null).show();
+        });
     }
 
     /**
@@ -268,22 +275,20 @@ public class Login extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        TextView text = findViewById(R.id.login_text);
+                        ImageButton question = findViewById(R.id.login_question);
                         if (changeBackground) {
                             int nextBackground = (arrLoginIndex + 1) % arrLogin.length;
                             int nextBackgroundID = arrLogin[nextBackground];
                             loginView.setBackgroundResource(nextBackgroundID);
                             arrLoginIndex = nextBackground;
-                            if (nextBackground > 0 && nextBackground < 11) {
-                                button.setBackgroundColor(getResources().getColor(R.color.black));
-                                button.setTextColor(getResources().getColor(R.color.white));
-                            } else {
-                                button.setBackgroundColor(getResources().getColor(R.color.white));
-                                button.setTextColor(getResources().getColor(R.color.black));
-                            }
+
+                            text.setVisibility(View.GONE);
+                            question.setVisibility(View.GONE);
                         } else {
-                            loginView.setBackgroundResource(R.drawable.login_background1);
-                            button.setBackgroundColor(getResources().getColor(R.color.green));
-                            button.setTextColor(getResources().getColor(R.color.black));
+                            loginView.setBackgroundResource(R.drawable.login_bg_light_base);
+                            text.setVisibility(View.VISIBLE);
+                            question.setVisibility(View.VISIBLE);
                         }
                     }
                 });
